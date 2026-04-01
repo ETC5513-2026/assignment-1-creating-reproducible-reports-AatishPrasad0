@@ -4,3 +4,49 @@ author: "Aatish Prasad"
 format: html
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(knitr)
+```
+
+Test
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+data <- read_csv("data/34334912_Aatish Prasad.csv")
+
+head(data, 6)
+str(data, 6)
+```
+
+# INTRODUCTION 
+
+This data set analysis aims to investigate the relationship between customer purchasing behaviour and targeted marketing expenditure. It seeks to determine whether increased marketing spending can have a significant influence on consumer behaviour. We also account for a variety of influential factors, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnectivity is an important step in optimising business decisions.
+
+### **Research Question section (2 points)**
+
+In this report we investigate whether an increase in marketing expenditure would have a significant increase in customer purchasing expenditure. It also accounts for other factors that might have an effect on purchase decisions. The purpose of this report is to identify the key drivers of purchasing behaviour and make a comparative analysis of marketing expenditure against other factors on this behaviour.
+
+# Data Set Introduction
+
+```{r}
+data_clean <- data %>% 
+  distinct() %>% 
+  mutate(
+  # Convert missing values to NA
+    across(c(signup_date, segment, notes), ~na_if(., "NA")),
+    across(c(signup_date, segment, notes), ~na_if(., "N/A")), 
+      
+  # Convert date to standard format
+  signup_date = dmy(signup_date)
+    
+    
+    )
+  
+```
+
+## CUSTOMER ID NOT INCLUDED FOR NA CHECK CUZ ID -  WANT TO LEAVE IT UNCHANGED
