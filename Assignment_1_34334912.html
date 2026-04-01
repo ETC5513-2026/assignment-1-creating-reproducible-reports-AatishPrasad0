@@ -24,6 +24,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -74,6 +109,80 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Test</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/34334912_Aatish Prasad.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 150 Columns: 7
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): customer_id, signup_date, segment, notes
+dbl (3): marketing_spend, visits, purchase_amount
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<section id="introduction" class="level1">
+<h1>INTRODUCTION</h1>
+<p>This data set analysis aims to investigate the relationship between customer purchasing behaviour and targeted marketing expenditure. It seeks to determine whether increased marketing spending can have a significant influence on consumer behaviour. We also account for a variety of influential factors, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnectivity is an important step in optimising business decisions.</p>
+<section id="research-question-section-2-points" class="level3">
+<h3 class="anchored" data-anchor-id="research-question-section-2-points"><strong>Research Question section (2 points)</strong></h3>
+<p>In this report we investigate whether an increase in marketing expenditure would have a significant increase in customer purchasing expenditure. It also accounts for other factors that might have an effect on purchase decisions. The purpose of this report is to identify the key drivers of purchasing behaviour and make a comparative analysis of marketing expenditure against other factors on this behaviour.</p>
+</section>
+</section>
+<section id="data-set-introduction" class="level1">
+<h1>Data Set Introduction</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert missing values to NA</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(signup_date, segment, notes), <span class="sc">~</span><span class="fu">na_if</span>(., <span class="st">"N/A"</span>)), </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert date to standard format</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">signup_date =</span> <span class="fu">dmy</span>(signup_date)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `signup_date = dmy(signup_date)`.
+Caused by warning:
+!  29 failed to parse.</code></pre>
+</div>
+</div>
+<section id="customer-id-not-included-for-na-check-cuz-id---want-to-leave-it-unchanged" class="level2">
+<h2 class="anchored" data-anchor-id="customer-id-not-included-for-na-check-cuz-id---want-to-leave-it-unchanged">CUSTOMER ID NOT INCLUDED FOR NA CHECK CUZ ID - WANT TO LEAVE IT UNCHANGED</h2>
+<p>The data set contains customer purchasing behaviour in relation to marketing expenditure and other variables. These include customer id, which uniquely identifies the customers, the customer segment(whether they are individuals, small businesses or enterprises) and notes about the interaction between the customer and the organisation recording these observations, all of which are stored as strings. There is also marketing spend (amount spent on marketing to a customer), the number of visits, and the total amount the customer has spent on purchases, which are recorded as double attributes. Finally, we include a signup_date, which is a Day attribute recording the date when the customer first made a transaction.</p>
+<p>To clean the data set, we ran the distinct function to remove duplicates, converted the “N/A” records into R-readable “NA” and converted the date column into a standard format for further operations.</p>
+</section>
+<section id="dataset-description" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-description">Dataset Description</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(data_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 150</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(data_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 150
+Columns: 7
+$ customer_id     &lt;chr&gt; "34334912_c0001", "34334912_c0002", "34334912_c0003", …
+$ signup_date     &lt;date&gt; NA, NA, 2025-05-22, 2025-09-14, 2025-09-02, 2025-01-2…
+$ marketing_spend &lt;dbl&gt; 1.17, 99.22, 236.95, 12.72, 132.47, 150.66, 64.28, 193…
+$ visits          &lt;dbl&gt; 1, 5, 7, 3, 5, 2, 6, 10, 3, 3, 5, 9, 2, 4, 6, 3, 6, 3,…
+$ purchase_amount &lt;dbl&gt; 0.00, 68.52, 169.02, 0.00, 117.41, 148.43, 42.51, 152.…
+$ segment         &lt;chr&gt; "Consumer", "SMB", "Consumer", "Consumer", "Consumer",…
+$ notes           &lt;chr&gt; NA, "contacted", NA, NA, NA, NA, "returned", "returned…</code></pre>
+</div>
+</div>
+<p>The dataset <strong>data_clean</strong> contains 150 observations and 7 variables.</p>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
