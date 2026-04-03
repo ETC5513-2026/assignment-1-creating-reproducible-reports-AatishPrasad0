@@ -73,6 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Assignment_1_34334912_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Assignment_1_34334912_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Assignment_1_34334912_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="Assignment_1_34334912_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="Assignment_1_34334912_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 
 
 </head>
@@ -140,22 +144,22 @@ dbl (3): marketing_spend, visits, purchase_amount
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(signup_date, segment, notes), <span class="sc">~</span><span class="fu">na_if</span>(., <span class="st">"N/A"</span>)), </span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert date to standard format</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">signup_date =</span> <span class="fu">dmy</span>(signup_date)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">signup_date =</span> <span class="fu">coalesce</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dmy</span>(signup_date),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mdy</span>(signup_date))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: There was 1 warning in `mutate()`.
-ℹ In argument: `signup_date = dmy(signup_date)`.
+<pre><code>Warning: There were 2 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `signup_date = coalesce(dmy(signup_date), mdy(signup_date))`.
 Caused by warning:
-!  29 failed to parse.</code></pre>
+!  29 failed to parse.
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
 </div>
 </div>
-<section id="customer-id-not-included-for-na-check-cuz-id---want-to-leave-it-unchanged" class="level2">
-<h2 class="anchored" data-anchor-id="customer-id-not-included-for-na-check-cuz-id---want-to-leave-it-unchanged">CUSTOMER ID NOT INCLUDED FOR NA CHECK CUZ ID - WANT TO LEAVE IT UNCHANGED</h2>
 <p>The data set contains customer purchasing behaviour in relation to marketing expenditure and other variables. These include customer id, which uniquely identifies the customers, the customer segment(whether they are individuals, small businesses or enterprises) and notes about the interaction between the customer and the organisation recording these observations, all of which are stored as strings. There is also marketing spend (amount spent on marketing to a customer), the number of visits, and the total amount the customer has spent on purchases, which are recorded as double attributes. Finally, we include a signup_date, which is a Day attribute recording the date when the customer first made a transaction.</p>
 <p>To clean the data set, we ran the distinct function to remove duplicates, converted the “N/A” records into R-readable “NA” and converted the date column into a standard format for further operations.</p>
-</section>
 <section id="dataset-description" class="level2">
 <h2 class="anchored" data-anchor-id="dataset-description">Dataset Description</h2>
 <div class="cell">
@@ -172,7 +176,7 @@ Caused by warning:
 <pre><code>Rows: 150
 Columns: 7
 $ customer_id     &lt;chr&gt; "34334912_c0001", "34334912_c0002", "34334912_c0003", …
-$ signup_date     &lt;date&gt; NA, NA, 2025-05-22, 2025-09-14, 2025-09-02, 2025-01-2…
+$ signup_date     &lt;date&gt; NA, 2025-01-29, 2025-05-22, 2025-09-14, 2025-09-02, 2…
 $ marketing_spend &lt;dbl&gt; 1.17, 99.22, 236.95, 12.72, 132.47, 150.66, 64.28, 193…
 $ visits          &lt;dbl&gt; 1, 5, 7, 3, 5, 2, 6, 10, 3, 3, 5, 9, 2, 4, 6, 3, 6, 3,…
 $ purchase_amount &lt;dbl&gt; 0.00, 68.52, 169.02, 0.00, 117.41, 148.43, 42.51, 152.…
@@ -181,6 +185,95 @@ $ notes           &lt;chr&gt; NA, "contacted", NA, NA, NA, NA, "returned", "retu
 </div>
 </div>
 <p>The dataset <strong>data_clean</strong> contains 150 observations and 7 variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> segment, <span class="at">y =</span> purchase_amount)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Customer Segment"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Purchase Amount"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-boxplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Assignment_1_34334912_files/figure-html/fig-boxplot-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Distribution of purchase amount by customer segment
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-boxplot" class="quarto-xref">Figure&nbsp;1</a> shows the median and interquartile range of purchase amount for each customer segment. As we can see, Small and Medium Businesses (SMB) exhibit the highest median purchase amount of the three, indicating that they tend to spend more on average.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(segment) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_purchase =</span> <span class="fu">mean</span>(purchase_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_purchase =</span> <span class="fu">median</span>(purchase_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_marketing =</span> <span class="fu">mean</span>(marketing_spend, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_visits =</span> <span class="fu">mean</span>(visits, <span class="at">na.rm =</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Summary Statistics"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">kable_styling</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"center"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"bordered"</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Summary Statistics
+</figcaption>
+<div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table table-bordered cell caption-top table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">segment</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">count</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">avg_purchase</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">median_purchase</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">avg_marketing</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">avg_visits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Consumer</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">135.5396</td>
+<td style="text-align: right;">126.14</td>
+<td style="text-align: right;">139.0134</td>
+<td style="text-align: right;">5.305882</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Enterprise</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">118.1482</td>
+<td style="text-align: right;">113.92</td>
+<td style="text-align: right;">137.0367</td>
+<td style="text-align: right;">5.111111</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SMB</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">157.4433</td>
+<td style="text-align: right;">155.71</td>
+<td style="text-align: right;">153.7489</td>
+<td style="text-align: right;">4.787234</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-summary" class="quarto-xref">Table&nbsp;1</a> shows summary statistics of the purchasing amount of each customer segment. This supports <a href="#fig-boxplot" class="quarto-xref">Figure&nbsp;1</a> in the claim that SMBs have higher purchasing spend, over less number of visits</p>
 </section>
 </section>
 

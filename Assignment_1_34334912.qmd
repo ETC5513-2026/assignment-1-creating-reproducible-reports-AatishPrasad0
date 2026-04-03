@@ -60,6 +60,7 @@ glimpse(data_clean)
 The dataset **data_clean** contains `r nrow(data_clean)` observations and `r ncol(data_clean)` variables.
 
 ```{r}
+#| label: fig-boxplot
 #| fig-cap: "Distribution of purchase amount by customer segment"
 
 data_clean %>% 
@@ -72,7 +73,10 @@ data_clean %>%
 
 ```
 
+@fig-boxplot shows the median and interquartile range of purchase amount for each customer segment. As we can see, Small and Medium Businesses (SMB) exhibit the highest median purchase amount of the three, indicating that they tend to spend more on average.
+
 ```{r}
+#| label: tbl-summary
 data_clean %>%
   group_by(segment) %>% 
   summarise(
@@ -82,12 +86,12 @@ data_clean %>%
     avg_marketing = mean(marketing_spend, na.rm = TRUE),
     avg_visits = mean(visits, na.rm =TRUE)
   ) %>% 
-  kable() %>% 
+  kable(caption = "Summary Statistics") %>% 
    kable_styling(
     full_width = FALSE,
     position = "center",
     bootstrap_options = c("bordered")
   )
-  
-
 ```
+
+@tbl-summary shows summary statistics of the purchasing amount of each customer segment. This supports @fig-boxplot in the claim that SMBs have higher purchasing spend, over less number of visits
