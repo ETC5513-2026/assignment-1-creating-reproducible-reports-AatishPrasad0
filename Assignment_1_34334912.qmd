@@ -94,4 +94,27 @@ data_clean %>%
   )
 ```
 
-@tbl-summary shows summary statistics of the purchasing amount of each customer segment. This supports @fig-boxplot in the claim that SMBs have higher purchasing spend, over less number of visits
+@tbl-summary shows summary statistics of the purchasing amount of each customer segment. This supports @fig-boxplot in the claim that SMBs have higher purchasing spend, over less number of visits.
+
+```{r}
+#| label: fig-marketing-purchase
+#| fig-cap: "Relationship between marketing expenditure and purchase amount"
+
+ggplot(data_clean, aes(x = marketing_spend, y = purchase_amount)) +
+  geom_point() +
+  geom_smooth()
+```
+
+```{r}
+#| label: fig-visits-purchase
+#| fig-cap: "Relationship between number of visits and purchase amount by segment"
+
+data_clean %>%
+  ggplot(aes(x = visits, y = purchase_amount, colour = segment)) +
+  geom_smooth(se = FALSE) +
+  labs(
+    x = "Number of Visits",
+    y = "Purchase Amount",
+    colour = "Customer Segment"
+  )
+```
