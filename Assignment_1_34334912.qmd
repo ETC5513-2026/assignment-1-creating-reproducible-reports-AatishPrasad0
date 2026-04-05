@@ -105,6 +105,8 @@ ggplot(data_clean, aes(x = marketing_spend, y = purchase_amount)) +
   geom_smooth()
 ```
 
+@fig-marketing-purchase indicates the purchase amount spent by customers relative to the amount of money spent marketing to them. We note that there seems to be a positive trend in this relationship, suggesting that the higher the marketing spend, the higher the money spent by customers on purchase transactions. This is supported by the upward sloping fitted line.
+
 ```{r}
 #| label: fig-visits-purchase
 #| fig-cap: "Relationship between number of visits and purchase amount by segment"
@@ -118,3 +120,5 @@ data_clean %>%
     colour = "Customer Segment"
   )
 ```
+
+@fig-visits-purchase shows the relationship between the purchase amount spent by customers and the number of visits, for each customer segment. We note that higher number of visits generally corresponds with higher purchase expenditure across all segments. Interestingly, the plot reveals that for customers with fewer visits, the Enterprise segment leads the pack in purchase amount, followed by a huge drop. The next highest spender for fewer visits are Small Businesses, with Individual Consumers taking the lead only when the number of visits exceed 7.
