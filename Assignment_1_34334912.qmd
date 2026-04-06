@@ -1,7 +1,11 @@
 ---
-title: "Assignment_1_34334912"
+title: "Assignment 1 34334912"
 author: "Aatish Prasad"
-format: html
+format: 
+    pdf: 
+        toc: true
+    html: 
+        theme: cerulean   
 ---
 
 ```{r}
@@ -13,23 +17,32 @@ library(knitr)
 library(kableExtra)
 ```
 
-Test
+```{r}
+#| include: false
+knitr:: opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+
+```
 
 ```{r}
 data <- read_csv("data/34334912_Aatish Prasad.csv")
 ```
 
-# INTRODUCTION
+# Introduction
 
-This data set analysis aims to investigate the relationship between customer purchasing behaviour and targeted marketing expenditure. It seeks to determine whether increased marketing spending can have a significant influence on consumer behaviour. We also account for a variety of influential factors, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnectivity is an important step in optimising business decisions.
+This analysis aims to investigate the **relationship between customer purchasing behaviour and targeted marketing expenditure**. It seeks to determine whether increased marketing spending can have a significant influence on consumer behaviour. We also account for a variety of influential factors, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnectivity is an important step in optimising business decisions.
 
-### **Research Question section (2 points)**
+### Research Question section (2 points)
 
-In this report we investigate whether an increase in marketing expenditure would have a significant increase in customer purchasing expenditure. It also accounts for other factors that might have an effect on purchase decisions. The purpose of this report is to identify the key drivers of purchasing behaviour and make a comparative analysis of marketing expenditure against other factors on this behaviour.
+This report investigates whether an increase in marketing expenditure would have a significant increase in customer purchasing expenditure. It also considers how factors such as visit frequency and customer segment influence this relationship The purpose of this report is to identify the key drivers of purchasing behaviour and make a comparative analysis of marketing expenditure against other factors on this behaviour.
 
 # Data Set Introduction
 
 ```{r}
+#| include: false 
 data_clean <- data %>% 
   distinct() %>% 
   mutate(
@@ -40,21 +53,21 @@ data_clean <- data %>%
   signup_date = coalesce(
   dmy(signup_date),
   mdy(signup_date))
-  
     )
-  
+
+glimpse(data_clean)
 ```
 
-The data set contains customer purchasing behaviour in relation to marketing expenditure and other variables. These include customer id, which uniquely identifies the customers, the customer segment(whether they are individuals, small businesses or enterprises) and notes about the interaction between the customer and the organisation recording these observations, all of which are stored as strings. There is also marketing spend (amount spent on marketing to a customer), the number of visits, and the total amount the customer has spent on purchases, which are recorded as double attributes. Finally, we include a signup_date, which is a Day attribute recording the date when the customer first made a transaction.
+The data set contains customer purchasing behaviour in relation to marketing expenditure along with other variables. These include **customer_id**, which uniquely identifies the customers, the customer **segment**(whether they are individuals, small businesses or enterprises) and **notes** about the interaction between the customer and the organisation recording these observations, all of which are stored as **strings**. There is also **marketing_spend** (amount spent on marketing to a customer), the number of **visits**, and the total **amount** the customer has spent on **purchases**, which are recorded as **double** attributes. Finally, we include a **signup_date**, which is a **Day** attribute recording the date when the customer first made a transaction.
 
 To clean the data set, we ran the distinct function to remove duplicates, converted the "N/A" records into R-readable "NA" and converted the date column into a standard format for further operations.
 
 ## Dataset Description
 
 ```{r}
+#| include: false
 nrow(data_clean)
 ncol(data_clean)
-glimpse(data_clean)
 ```
 
 The dataset **data_clean** contains `r nrow(data_clean)` observations and `r ncol(data_clean)` variables.
@@ -73,7 +86,7 @@ data_clean %>%
 
 ```
 
-@fig-boxplot shows the median and interquartile range of purchase amount for each customer segment. As we can see, Small and Medium Businesses (SMB) exhibit the highest median purchase amount of the three, indicating that they tend to spend more on average.
+@fig-boxplot shows the **median** and **interquartile** range of purchase amount for each customer segment. As we can see, **Small and Medium Businesses (SMB)** exhibit the highest median purchase amount of the three, indicating that they tend to **spend more** on average.
 
 ```{r}
 #| label: tbl-summary
@@ -94,7 +107,9 @@ data_clean %>%
   )
 ```
 
-@tbl-summary shows summary statistics of the purchasing amount of each customer segment. This supports @fig-boxplot in the claim that SMBs have higher purchasing spend, over less number of visits.
+@tbl-summary shows **summary statistics** of the purchasing behaviour **across customer segments**. This supports @fig-boxplot in the claim that Small and Medium Businesses (SMB) have higher average and median purchase amounts despite relatively fewer visits.
+
+## Results section (5 points)
 
 ```{r}
 #| label: fig-marketing-purchase
@@ -105,7 +120,7 @@ ggplot(data_clean, aes(x = marketing_spend, y = purchase_amount)) +
   geom_smooth()
 ```
 
-@fig-marketing-purchase indicates the purchase amount spent by customers relative to the amount of money spent marketing to them. We note that there seems to be a positive trend in this relationship, suggesting that the higher the marketing spend, the higher the money spent by customers on purchase transactions. This is supported by the upward sloping fitted line.
+@fig-marketing-purchase illustrates the **purchase amount spent by customers relative to the amount of money spent marketing** to them. We note that there seems to be a **positive trend** in this relationship, suggesting that the higher the marketing spend, the higher the money spent by customers on purchase transactions. This is supported by the **upward sloping fitted line**, once again suggesting a positive association between the two variables.
 
 ```{r}
 #| label: fig-visits-purchase
@@ -121,4 +136,4 @@ data_clean %>%
   )
 ```
 
-@fig-visits-purchase shows the relationship between the purchase amount spent by customers and the number of visits, for each customer segment. We note that higher number of visits generally corresponds with higher purchase expenditure across all segments. Interestingly, the plot reveals that for customers with fewer visits, the Enterprise segment leads the pack in purchase amount, followed by a huge drop. The next highest spender for fewer visits are Small Businesses, with Individual Consumers taking the lead only when the number of visits exceed 7.
+@fig-visits-purchase shows the relationship between the **purchase amount spent by customers and the number of visits, across customer segment**. We note that higher number of visits generally corresponds with higher purchase expenditure across all segments. Interestingly, the plot reveals that for customers with fewer visits, the Enterprise segment leads the pack in purchase amount, followed by a huge drop. The next highest spender for fewer visits are Small Businesses, with Individual Consumers taking the lead only when the number of visits exceed 7.
