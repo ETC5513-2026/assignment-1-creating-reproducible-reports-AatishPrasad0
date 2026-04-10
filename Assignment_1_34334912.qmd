@@ -33,7 +33,7 @@ data <- read_csv("data/34334912_Aatish Prasad.csv")
 
 # Introduction
 
-This analysis aims to investigate the **relationship between customer purchasing behaviour and targeted marketing expenditure**. It seeks to determine whether increased marketing spending can have a significant influence on consumer behaviour. We also account for a variety of influential factors, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnectivity is an important step in optimising business decisions.
+This analysis aims to investigate the **relationship between customer purchasing behaviour and targeted marketing expenditure**. It seeks to determine whether **increased marketing spending** can have a significant **influence on consumer behaviour**. We also account for a variety of **influential factors**, such as how often the customer is transacting, how long the customer has been transacting, as well as the type of customer. This provides a more rounded, multivariate basis for our analysis. Understanding the the relationship between these factors and the importance of their interconnection is an important step in optimising business decisions.
 
 ### Research Question section (2 points)
 
